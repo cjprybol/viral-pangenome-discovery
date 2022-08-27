@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# curl https://rclone.org/install.sh | sudo bash
+
+# non-sudo rclone install
+# mkdir -p ~/.local/bin/
+
+# [[ ! -f $HOME/.local/bin/rclone ]] && \
+# wget https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
+# unzip rclone-current-linux-amd64.zip && \
+# cp rclone-*-linux-amd64/rclone $HOME/.local/bin/ && \
+# chmod +x $HOME/.local/bin/rclone && \
+# mkdir -p $HOME/.local/share/man/man1 && \
+# cp rclone-*-linux-amd64/rclone.1 $HOME/.local/share/man/man1 && \
+# rm rclone-current-linux-amd64.zip
+
+# copy dotfiles to home directory
+# [[ ! -f "$HOME/workspace/dotfiles/copy-to-home.sh" ]] && bash $HOME/workspace/dotfiles/copy-to-home.sh
+
+# julia -e 'import Pkg; Pkg.add(url="https://github.com/cjprybol/Mycelia.git", rev="master")'
+# julia \
+#     --project="$HOME/workspace/sars-cov2-pangenome-analysis" \
+#     --startup-file=no \
+#     'import Pkg; Pkg.instantiate()'
+
+# mamba install -c conda-forge -c bioconda snakemake

@@ -1,7 +1,7 @@
 # originally started with this but feels better to not work on the default environment
 # install me with:
-# conda env update --file environment.yaml <- did work
-# conda env update -n base --file environment.yaml <- didn't work
+# conda env update --file environment.yml <- did work
+# conda env update -n base --file environment.yml <- didn't work
 # name: base
 
 # to create
@@ -25,3 +25,4 @@ channels:
 dependencies:
   - ncbi-datasets-cli
   - snakemake
+  - sra-tools

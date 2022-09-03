@@ -5,3 +5,4 @@ metadata/sequences.csv
 metadata
 ncbi_dataset.zip
 Manifest.toml
+kmer-saturation/*

@@ -56,12 +56,15 @@ rule unzip_taxon_10239_genbank:
 # snakemake --snakefile Snakefile.py --cores 1 rehydrate_taxon_10239_genbank
 rule rehydrate_taxon_10239_genbank:
     input:
-        "data/taxon_10239.genbank"
+        "data/taxon_10239.genbank/"
+    output:
+        "data/taxon_10239.genbank/rehydrated.done"
     resources:
         tmpdir="data/"
     shell:
         """
         datasets rehydrate --directory data/taxon_10239.genbank
+        touch data/taxon_10239.genbank/rehydrated.done
         """
 
 # ################################################################################################
@@ -112,3 +115,46 @@ rule rehydrate_taxon_10239_genbank:
 
 # converting jsonl to tables
 # dataformat tsv genome --inputfile human/ncbi_dataset/data/assembly_data_report.jsonl
+
+# snakemake --snakefile Snakefile.py --cores 1 sra_prefetch
+rule sra_prefetch:
+    input:
+        "metadata/usa_mt-pleasant-research-farm_cornell-university_new-york/SraAccList.txt"
+    output:
+        "data/usa_mt-pleasant-research-farm_cornell-university_new-york/prefetch.done"
+    shell:
+        """
+        prefetch \
+            --max-size u \
+            --progress \
+            --output-directory data/usa_mt-pleasant-research-farm_cornell-university_new-york/ \
+            --option-file metadata/usa_mt-pleasant-research-farm_cornell-university_new-york/SraAccList.txt
+        touch {output}
+        """
+
+# snakemake --snakefile Snakefile.py --cores 1 sra_fasterq
+rule sra_fasterq:
+    input:
+        # [ for dataset in DATASETS]
+        # ['data/usa_mt-pleasant-research-farm_cornell-university_new-york/{}'.format(x) for x in os.listdir('data/usa_mt-pleasant-research-farm_cornell-university_new-york') if (os.path.isdir('data/usa_mt-pleasant-research-farm_cornell-university_new-york/{}'.format(x)) and x.startswith("SRR"))]
+        # "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469"
+        "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476619"
+        # "data/usa_mt-pleasant-research-farm_cornell-university_new-york/prefetch.done"
+    output:
+        # "data/usa_mt-pleasant-research-farm_cornell-university_new-york/fasterq.done"
+    shell:
+        """
+        fasterq-dump --split-3 {input} -O {input}
+        gzip {input}/*.fastq
+        """
+        
+# snakemake --snakefile Snakefile.py --cores 1 merge_reference_fastas --dry-run
+rule merge_reference_fastas:
+    input:
+        "data/taxon_10239.genbank"
+    output:
+        "data/taxon_10239.genbank/joint.fasta"
+    shell:
+        """
+        
+        """

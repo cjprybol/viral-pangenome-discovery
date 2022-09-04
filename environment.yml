@@ -1,6 +1,7 @@
 # originally started with this but feels better to not work on the default environment
 # install me with:
 # conda env update --file environment.yml <- did work
+# mamba env update --file environment.yml
 # conda env update -n base --file environment.yml <- didn't work
 # name: base
 
@@ -26,3 +27,8 @@ dependencies:
   - ncbi-datasets-cli
   - snakemake
   - sra-tools
+  - bowtie2
+  - bwa
+  - hisat2
+  - kraken2
+  - sourmash

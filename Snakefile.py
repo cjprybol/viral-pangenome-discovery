@@ -148,6 +148,9 @@ rule sra_fasterq:
         gzip {input}/*.fastq
         """
         
+# rule trimmomatic:
+    
+        
 # snakemake --snakefile Snakefile.py --cores 1 merge_reference_fastas --dry-run
 rule merge_reference_fastas:
     input:
@@ -156,5 +159,59 @@ rule merge_reference_fastas:
         "data/taxon_10239.genbank/joint.fasta"
     shell:
         """
-        
+        papermill merge-fastas.ipynb
         """
+
+# rule index_fasta:
+#     input:
+#     output:
+#     samtools faidx:
+
+
+# Total time for call to driver() for forward index: 00:48:53
+# hisat2-build -p `nproc` data/taxon_10239.genbank/joint.fna data/taxon_10239.genbank/joint.fna
+# hisat2 [options]* -x <hisat2-idx> {-1 <m1> -2 <m2> | -U <r> | --sra-acc <SRA accession number>} [-S <hit>]
+# --al <path>, --al-gz <path>, --al-bz2 <path>
+
+# --al-conc-gz /path/to/file_prefix%.aligned.fastq.gz
+# --no-unal
+# -p/--threads
+
+# Total time for backward call to driver() for mirror index: 00:18:55
+# bowtie2-build --threads `nproc` data/taxon_10239.genbank/joint.fna data/taxon_10239.genbank/joint.fna
+
+
+# bwa index data/taxon_10239.genbank/joint.fna
+
+
+# need to pass through samtools to filter out unaligned & secondary
+# bwa mem ref.fa read1.fq read2.fq > aln-pe.sam
+# now try mapping with each of them
+
+# wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20220607.tar.gz
+# tar -xvzf k2_viral_20220607.tar.gz
+
+# Loading database information... done.
+# 106359342 sequences (32120.52 Mbp) processed in 802.851s (7948.6 Kseq/m, 2400.48 Mbp/m).
+#   150693 sequences classified (0.14%)
+#   106208649 sequences unclassified (99.86%)
+
+# didn't create a new directory and didn't actually write out any of the outputs or anything new??
+
+
+# output file doesn't seem to be helpful at all
+# also very very large
+# consider throwing away?
+
+
+mkdir -p "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607"
+kraken2 \
+    --report-zero-counts \
+    --use-names \
+    --threads `nproc` \
+    --db data/kraken-databases/k2_viral_20220607 \
+    --output data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/kraken-output.txt \
+    --report data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/kraken-report.txt \
+    --gzip-compressed \
+    --classified-out "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/SRR6476469#.classified.fastq" \
+    --paired data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz

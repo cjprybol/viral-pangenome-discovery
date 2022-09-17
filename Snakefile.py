@@ -67,6 +67,17 @@ rule rehydrate_taxon_10239_genbank:
         touch data/taxon_10239.genbank/rehydrated.done
         """
 
+# snakemake --snakefile Snakefile.py --cores 1 merge_reference_fastas --dry-run
+rule merge_reference_fastas:
+    input:
+        "data/taxon_10239.genbank"
+    output:
+        "data/taxon_10239.genbank/joint.fasta"
+    shell:
+        """
+        papermill merge-fastas.ipynb
+        """
+
 # ################################################################################################
 # # BY TAXON ID
 # # Collecting 62,332 genome accessions [===============>--------------------------------]  35% 22000/62332
@@ -107,6 +118,10 @@ rule rehydrate_taxon_10239_genbank:
 #         datasets rehydrate --directory data/taxon_10239
 #         """
 
+################################################################################################
+# DOWNLOAD DATA
+################################################################################################
+
 # download IMG/VR
 # https://genome.jgi.doe.gov/portal/pages/dynamicOrganismDownload.jsf?organism=IMG_VR
 # need globus to do automatically
@@ -116,8 +131,8 @@ rule rehydrate_taxon_10239_genbank:
 # converting jsonl to tables
 # dataformat tsv genome --inputfile human/ncbi_dataset/data/assembly_data_report.jsonl
 
-# snakemake --snakefile Snakefile.py --cores 1 sra_prefetch
-rule sra_prefetch:
+# snakemake --snakefile Snakefile.py --cores 1 sra_prefetch_mt_pleasant
+rule sra_prefetch_mt_pleasant:
     input:
         "metadata/usa_mt-pleasant-research-farm_cornell-university_new-york/SraAccList.txt"
     output:
@@ -132,7 +147,7 @@ rule sra_prefetch:
         touch {output}
         """
 
-# snakemake --snakefile Snakefile.py --cores 1 sra_fasterq
+# snakemake --snakefile Snakefile.py --cores 1 sra_fasterq_mt_pleasant
 rule sra_fasterq:
     input:
         # [ for dataset in DATASETS]
@@ -148,19 +163,80 @@ rule sra_fasterq:
         gzip {input}/*.fastq
         """
         
-# rule trimmomatic:
-    
-        
-# snakemake --snakefile Snakefile.py --cores 1 merge_reference_fastas --dry-run
-rule merge_reference_fastas:
+# snakemake --snakefile Snakefile.py --cores 1 sra_prefetch_exposome
+rule sra_prefetch_exposome:
     input:
-        "data/taxon_10239.genbank"
+        "metadata/exposome/SraAccList-10.txt"
+        # "metadata/exposome/SraAccList.txt"
     output:
-        "data/taxon_10239.genbank/joint.fasta"
+        "data/exposome/prefetch.done"
     shell:
         """
-        papermill merge-fastas.ipynb
+        prefetch \
+            --max-size u \
+            --progress \
+            --output-directory data/exposome/ \
+            --option-file {input}
+        touch {output}
         """
+
+# work/viral-pangenome-discovery/metadata//SraAccList-10.txt
+
+# snakemake --snakefile Snakefile.py --cores 1 sra_prefetch_uc_boulder_wastewater
+rule sra_prefetch_uc_boulder_wastewater:
+    input:
+        "metadata/uc_boulder_wastewater/SraAccList-10.txt"
+        # "metadata/uc_boulder_wastewater/SraAccList.txt"
+    output:
+        "data/uc_boulder_wastewater/prefetch.done"
+    shell:
+        """
+        prefetch \
+            --max-size u \
+            --progress \
+            --output-directory data/uc_boulder_wastewater/ \
+            --option-file {input}
+        touch {output}
+        """
+
+# human microbiome data
+# snakemake --snakefile Snakefile.py --cores 1 download_hmp_data
+rule download_hmp_data:
+    shell:
+        """
+        echo "implement me"
+        """
+
+################################################################################################
+# GET INDICES
+################################################################################################        
+
+rule download_kraken_viruses_db:
+kraken viruses
+# wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20220607.tar.gz
+# tar -xvzf k2_viral_20220607.tar.gz
+
+# archaea, bacteria, viral, plasmid, human1, UniVec_Core
+# Standard plus protozoa & fungi
+# Standard plus protozoa, fungi & plant
+# capped at 8
+rule download_kraken_pluspfp8_db:
+https://genome-idx.s3.amazonaws.com/kraken/k2_pluspfp_08gb_20220607.tar.gz
+    
+rule download_kraken_pluspfp16_db:
+# capped at 16
+https://genome-idx.s3.amazonaws.com/kraken/k2_pluspfp_16gb_20220607.tar.gz
+
+# https://benlangmead.github.io/aws-indexes/centrifuge
+# NCBI: nucleotide non-redundant sequences 	March, 2018
+#
+https://genome-idx.s3.amazonaws.com/centrifuge/nt_2018_3_3.tar.gz
+        
+################################################################################################
+# CLASSIFY READS
+################################################################################################
+        
+# rule trimmomatic:
 
 # rule index_fasta:
 #     input:
@@ -204,14 +280,28 @@ rule merge_reference_fastas:
 # consider throwing away?
 
 
-mkdir -p "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607"
-kraken2 \
-    --report-zero-counts \
-    --use-names \
-    --threads `nproc` \
-    --db data/kraken-databases/k2_viral_20220607 \
-    --output data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/kraken-output.txt \
-    --report data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/kraken-report.txt \
-    --gzip-compressed \
-    --classified-out "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/SRR6476469#.classified.fastq" \
-    --paired data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz
+# mkdir -p "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607"
+# kraken2 \
+#     --report-zero-counts \
+#     --use-names \
+#     --threads `nproc` \
+#     --db data/kraken-databases/k2_viral_20220607 \
+#     --output data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/kraken-output.txt \
+#     --report data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/kraken-report.txt \
+#     --gzip-compressed \
+#     --classified-out "data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/k2_viral_20220607/SRR6476469#.classified.fastq" \
+#     --paired data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz
+
+
+# # archaea, bacteria, viral, plasmid, human1, UniVec_Core
+# # Standard plus protozoa & fungi
+# # Standard plus protozoa, fungi & plant
+# # capped at 8
+# https://genome-idx.s3.amazonaws.com/kraken/k2_pluspfp_08gb_20220607.tar.gz
+# # capped at 16
+# https://genome-idx.s3.amazonaws.com/kraken/k2_pluspfp_16gb_20220607.tar.gz
+
+# # https://benlangmead.github.io/aws-indexes/centrifuge
+# # NCBI: nucleotide non-redundant sequences 	March, 2018
+# #
+# https://genome-idx.s3.amazonaws.com/centrifuge/nt_2018_3_3.tar.gz

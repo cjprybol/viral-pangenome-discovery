@@ -17,6 +17,9 @@
 # conda env export --no-builds
 # conda env export --no-builds --from-history
 
+# had to install centrifuge from source
+# dropped sourmash because it's not a very inclusive database
+
 # to use:
 # conda activate viral-pangenome-discovery
 name: viral-pangenome-discovery
@@ -31,4 +34,6 @@ dependencies:
   - bwa
   - hisat2
   - kraken2
-  - sourmash
+  - megahit
+  - spades
+  - blast

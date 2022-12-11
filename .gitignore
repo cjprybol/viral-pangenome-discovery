@@ -9,3 +9,4 @@ Manifest.toml
 *.gz
 *.fastq
 *.fq
+tmp/*

@@ -32,8 +32,15 @@ dependencies:
   - sra-tools
   - bwa
   - kraken2
+  - spades
   - megahit
   - blast
   - seqtk
   - trimmomatic
   - mmseqs2
+  - cat
+  - minimap2
+  - samtools
+  - kaiju
+  - fastqc
+  - trim-galore

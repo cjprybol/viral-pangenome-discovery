@@ -4,10 +4,8 @@ Multiples paths to discovery:
 - classify first
     - classify reads to be of viral origin
         - assemble by sample and then add to pangenome
-        - assemble directly across sample into pangenome
 - assemble first
     - assemble by dataset & classify assembled contigs
-    - assemble across datasets and classify assembled contigs
     
 ^ compare against eachother and then to literature for best practices
 

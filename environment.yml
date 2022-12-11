@@ -30,10 +30,10 @@ dependencies:
   - ncbi-datasets-cli
   - snakemake
   - sra-tools
-  - bowtie2
   - bwa
-  - hisat2
   - kraken2
   - megahit
-  - spades
   - blast
+  - seqtk
+  - trimmomatic
+  - mmseqs2

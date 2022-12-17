@@ -1,8 +1,6 @@
 .snakemake
 data
 *.ipynb_checkpoints/
-metadata/sequences.csv
-metadata
 ncbi_dataset.zip
 Manifest.toml
 */kmer-saturation/*

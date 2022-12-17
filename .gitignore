@@ -8,3 +8,4 @@ Manifest.toml
 *.fastq
 *.fq
 tmp/*
+snakemake/logs/*

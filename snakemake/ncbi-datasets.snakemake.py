@@ -75,7 +75,7 @@ rule rehydrate_taxon:
         """
 
 # snakemake --use-conda --snakefile snakemake/0.ncbi-datasets.snakemake.py --cores 1 merge_fastas --config taxon="10239" source="genbank"
-joint_fasta_outfile = dehydrated_taxon_directory + "/" + taxon + ".fasta"
+joint_fasta_outfile = dehydrated_taxon_directory + "/" + taxon + ".fna"
 rule merge_fastas:
     input:
         rehydrated_taxon_output
@@ -93,6 +93,3 @@ rule merge_fastas:
             -print0 \
             | xargs -0 cat > {output}
         """
-
-# find . -maxdepth 3 -type f -name '*_genomic.fna' -print0 | more
-# echo find {dehydrated_taxon_directory}/. -maxdepth 1 -type f -name 'file_.pdb' -print0 | xargs -0 cat >all.pdb

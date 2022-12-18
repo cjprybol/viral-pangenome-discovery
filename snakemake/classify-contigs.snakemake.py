@@ -1,93 +1,7 @@
-# https://papermill.readthedocs.io/en/latest/usage-cli.html
-# run `snakemake some_target --delete-all-output` to clean outputs from target
-# run `snakemake --delete-all-output --cores all` to clean all outputs
-# run `snakemake --cores all` to run whole workflow
-# run `snakemake some_target --cores all` to run up to and through target
-
-# document
-# https://snakemake.readthedocs.io/en/v6.0.3/executing/cli.html#visualization
-# snakemake --snakefile snakemake/2.assembly-first.snakemake.py --cores 1 --forceall --dag | dot -Tpdf > snakemake/2.assembly-first.snakemake.py.dag.pdf
-
-# lint
-# snakemake --lint --snakefile snakemake/2.assembly-first.snakemake.py
-
 import os
-import datetime
-
-invoked_datetime = datetime.datetime.now()
-invoked_timestamp = f"{invoked_datetime.year}{invoked_datetime.month}{invoked_datetime.day}{invoked_datetime.hour}{invoked_datetime.second}"
 
 ########################################################################################
-# assemble into contigs with megahit
-########################################################################################
-
-# snakemake --snakefile snakemake/2.assembly-first.snakemake.py --cores all megahit_assemble --config sample=""
-rule megahit_assemble:
-    log:
-        f"snakemake/logs/{invoked_timestamp}.log"
-    conda:
-        "environment.yml"
-    shell:
-        """
-        megahit \
-            -1 /home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/SRR6399459_1.100k.fastq.gz \
-            -2 /home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/SRR6399459_2.100k.fastq.gz \
-            -o /home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/megahit_100k
-        """
-
-########################################################################################
-# assemble into contigs with spades
-########################################################################################
-
-# # conda install didn't work, trying their binaries and manual compile
-# mkdir -p $HOME/software
-# cd $HOME/software
-# wget http://cab.spbu.ru/files/release3.15.5/SPAdes-3.15.5-Linux.tar.gz
-# tar -xzf SPAdes-3.15.5-Linux.tar.gz
-# cd SPAdes-3.15.5-Linux/bin/
-# add to path
-
-# mkdir -p $HOME/software
-# cd $HOME/software
-# wget http://cab.spbu.ru/files/release3.15.5/SPAdes-3.15.5.tar.gz
-# tar -xzf SPAdes-3.15.5.tar.gz
-# cd SPAdes-3.15.5
-# ./spades_compile.sh*
-# ^ don't have sudo access to run this
-
-# PREFIX=/usr/local ./spades_compile.sh
-        
-# Usage: spades.py [options] -o <output_dir>
-
-# Basic options:
-#   -o <output_dir>             directory to store all the resulting files (required)
-  
-#                               file with trusted contigs
-  
-#                               file with untrusted contigs
-
-#   -t <int>, --threads <int>   number of threads. [default: 16]
-#   -m <int>, --memory <int>    RAM limit for SPAdes in Gb (terminates if exceeded). [default: 250]
-
-
-# # I couldn't get this to run :(
-# # I tried:
-# # 3.15.0-4
-# # 3.14.0-1
-# # 3.13.0
-# snakemake --snakefile snakemake/2.assembly-first.snakemake.py --cores all spades_assemble
-# rule spades_assemble:
-#     shell:
-#         """
-#         spades.py \
-#             --meta \
-#             -1 data/SRA/SRR6399459/SRR6399459_1.10k.fastq.gz \
-#             -2 data/SRA/SRR6399459/SRR6399459_2.10k.fastq.gz \
-#             -o data/SRA/SRR6399459/spades
-#         """
-
-########################################################################################
-# classify assembled contigs with blast
+# classify assembled contigs with sourmash
 ########################################################################################
 
 # dropping because of non-inclusive DB
@@ -97,11 +11,13 @@ rule megahit_assemble:
 # sourmash lca summarize --db genbank-k31.lca.json.gz \
     # --query some-genome.fa.gz.sig
 
+########################################################################################
+# classify assembled contigs with blast
+########################################################################################
+
 # TODO
 # snakemake --snakefile Snakefile.py --cores 1 download_blast_nt
 rule download_blast_nt:
-    log:
-        f"snakemake/logs/{invoked_timestamp}.log"
     conda:
         "environment.yml"
     shell:

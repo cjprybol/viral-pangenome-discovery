@@ -23,6 +23,7 @@
 # to use:
 # conda activate viral-pangenome-discovery
 name: viral-pangenome-discovery
+# channel_priority: strict
 channels:
   - conda-forge
   - bioconda

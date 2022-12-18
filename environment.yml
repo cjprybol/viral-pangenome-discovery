@@ -45,3 +45,7 @@ dependencies:
   - kaiju
   - fastqc
   - trim-galore
+  - fastani
+  - seqkit
+  - bowtie2
+  - megan

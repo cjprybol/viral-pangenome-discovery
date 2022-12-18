@@ -34,6 +34,7 @@ rule classify_kraken:
 ########################################################################################
 # classify reads with centriguge
 ########################################################################################
+# couldn't get to work
 
 # mkdir -p data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/centrifuge
 # centrifuge \
@@ -49,6 +50,7 @@ rule classify_kraken:
 # classify reads with kaiju
 # https://github.com/bioinformatics-centre/kaiju
 ########################################################################################
+# dropping because of non-inclusive database
 
 # kaiju -z `nproc` -t nodes.dmp -f refseq/kaiju_db_refseq.fmi -i firstfile.fastq -j secondfile.fastq -o kaiju.out
 

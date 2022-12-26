@@ -1,17 +1,6 @@
 import os
 
 ########################################################################################
-# classify assembled contigs with sourmash
-########################################################################################
-
-# dropping because of non-inclusive DB
-# https://sourmash.readthedocs.io/en/latest/tutorials-lca.html
-# curl -L -o genbank-k31.lca.json.gz https://osf.io/4f8n3/download
-# sourmash sketch dna -p scaled=1000,k=31 --name-from-first some-genome.fa.gz
-# sourmash lca summarize --db genbank-k31.lca.json.gz \
-    # --query some-genome.fa.gz.sig
-
-########################################################################################
 # classify assembled contigs with blast
 ########################################################################################
 
@@ -160,38 +149,6 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
 #    subject_loc, num_threads
 
 ########################################################################################
-# classify assembled contigs with minimap
-########################################################################################
-
-# map contigs to reference genomes
-
-# snakemake --snakefile Snakefile.py --cores 1 minimap_megahit_assembled_contigs_SRR6399459_100k
-rule minimap_megahit_assembled_contigs_SRR6399459_100k:
-    log:
-        f"snakemake/logs/{invoked_timestamp}.log"
-    conda:
-        "environment.yml"
-    shell:
-        """
-        minimap2 -ax asm5 data/taxon_10239.genbank/joint.fna data/exposome/SRR6399459/megahit_100k/final.contigs.fa > data/exposome/SRR6399459/megahit_100k/final.contigs.fa.joint.fna.sam
-        """
-
-# snakemake --snakefile Snakefile.py --cores 1 samtools_filter_minimap_megahit_assembled_contigs_SRR6399459_100k
-rule samtools_filter_minimap_megahit_assembled_contigs_SRR6399459_100k:
-    log:
-        f"snakemake/logs/{invoked_timestamp}.log"
-    conda:
-        "environment.yml"
-    shell:
-        """
-        samtools \
-            view \
-            --with-header \
-            --excl-flags 3844 \
-            data/exposome/SRR6399459/megahit_100k/final.contigs.fa.joint.fna.sam \
-            > data/exposome/SRR6399459/megahit_100k/final.contigs.fa.joint.fna.sam.filtered.sam
-        """
-########################################################################################
 # classify assembled contigs with MMSeq2
 # couldn't get to work :(
 ########################################################################################
@@ -268,6 +225,12 @@ rule samtools_filter_minimap_megahit_assembled_contigs_SRR6399459_100k:
 ########################################################################################
 
 ########################################################################################
-# map reads back to assembled & classified contigs
-# bwa-mem
+# classify assembled contigs with sourmash
 ########################################################################################
+
+# dropping because of non-inclusive DB
+# https://sourmash.readthedocs.io/en/latest/tutorials-lca.html
+# curl -L -o genbank-k31.lca.json.gz https://osf.io/4f8n3/download
+# sourmash sketch dna -p scaled=1000,k=31 --name-from-first some-genome.fa.gz
+# sourmash lca summarize --db genbank-k31.lca.json.gz \
+    # --query some-genome.fa.gz.sig

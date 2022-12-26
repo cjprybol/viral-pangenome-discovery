@@ -13,7 +13,7 @@ import os
 out_directory = config["out_directory"]
 kraken_pluspfp8 = "k2_pluspfp_08gb_20220607"
 
-# snakemake --use-conda  --snakefile snakemake/classify-reads.snakemake.py --cores 1 download_kraken_pluspfp8_db --config out_directory=data/kraken-databases
+# snakemake --use-conda  --snakefile snakemake/download-databases.snakemake.py --cores 1 download_kraken_pluspfp8_db --config out_directory=data/kraken-databases
 rule download_kraken_pluspfp8_db:
     conda:
         "../environment.yml"
@@ -26,22 +26,22 @@ rule download_kraken_pluspfp8_db:
         tar -xvzf {out_directory}/{kraken_pluspfp8}.tar.gz --directory {output}
         """
 
-# # done!
-# # capped at 16
-# kraken_pluspfp16 = "k2_pluspfp_16gb_20220607"
+# done!
+# capped at 16
+kraken_pluspfp16 = "k2_pluspfp_16gb_20220607"
 
-# # snakemake --use-conda  --snakefile snakemake/classify-reads.snakemake.py --cores 1 download_kraken_pluspfp16_db --config out_directory=data/kraken-databases
-# rule download_kraken_pluspfp16_db:
-#     conda:
-#         "../environment.yml"
-#     output:
-#         directory(out_directory + "/" + kraken_pluspfp16)
-#     shell:
-#         """
-#         wget --no-clobber --directory-prefix {out_directory} https://genome-idx.s3.amazonaws.com/kraken/{kraken_pluspfp16}.tar.gz
-#         mkdir -p {output}
-#         tar -xvzf {out_directory}/{kraken_pluspfp16}.tar.gz --directory {output}
-#         """
+# snakemake --use-conda  --snakefile snakemake/download-databases.snakemake.py --cores 1 download_kraken_pluspfp16_db --config out_directory=data/kraken-databases
+rule download_kraken_pluspfp16_db:
+    conda:
+        "../environment.yml"
+    output:
+        directory(out_directory + "/" + kraken_pluspfp16)
+    shell:
+        """
+        wget --no-clobber --directory-prefix {out_directory} https://genome-idx.s3.amazonaws.com/kraken/{kraken_pluspfp16}.tar.gz
+        mkdir -p {output}
+        tar -xvzf {out_directory}/{kraken_pluspfp16}.tar.gz --directory {output}
+        """
         
 # # TODO
 # # snakemake --use-conda  --snakefile snakemake/classify-reads.snakemake.py --cores 1 download_kraken_pluspfp_db --config out_directory=data/kraken-databases
@@ -57,6 +57,7 @@ rule download_kraken_pluspfp8_db:
 
 ########################################################################################
 # DOWNLOAD CENTRIFUGE DATABASES
+# couldn't get to run
 ########################################################################################
 
 # # https://benlangmead.github.io/aws-indexes/centrifuge
@@ -84,6 +85,7 @@ rule download_kraken_pluspfp8_db:
 ########################################################################################
 # DOWNLOAD KAIJU DATABASES
 # https://github.com/bioinformatics-centre/kaiju
+# dropped because of non-inclusive database
 ########################################################################################
 
 # mkdir data/kaijudb

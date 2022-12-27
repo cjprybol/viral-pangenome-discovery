@@ -5,16 +5,29 @@ import os
 ########################################################################################
 
 # TODO
-# snakemake --snakefile Snakefile.py --cores 1 download_blast_nt
+# snakemake --use-conda --snakefile snakemake/classify-contigs.snakemake.py --cores 1 download_blast_nt
 rule download_blast_nt:
     conda:
-        "environment.yml"
+        "../environment.yml"
     shell:
         """
         mkdir -p data/blastdb
         cd data/blastdb
         time update_blastdb.pl --decompress nt
         """
+        
+# TODO
+# snakemake --use-conda --snakefile snakemake/classify-contigs.snakemake.py --cores 1 download_blast_nr
+# dropped because it's too big and we have other protein databases (350-400Gb)
+# rule download_blast_nr:
+#     conda:
+#         "../environment.yml"
+#     shell:
+#         """
+#         mkdir -p data/blastdb
+#         cd data/blastdb
+#         time update_blastdb.pl --decompress nr
+#         """
 
 # update_blastdb.pl --showall pretty
 # refseq_protein for protein
@@ -25,8 +38,8 @@ rule download_blast_nt:
 
 # snakemake --snakefile Snakefile.py --cores 1 blast_nt_megahit_assembled_contigs_SRR6399459_100k
 rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
-    log:
-        f"snakemake/logs/{invoked_timestamp}.log"
+    # log:
+    #     f"snakemake/logs/{invoked_timestamp}.log"
     conda:
         "environment.yml"
     shell:
@@ -39,198 +52,95 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
             -out data/exposome/SRR6399459/megahit_100k/final.contigs.fa.blastp.txt
         """
 
-# $ blastn -help
-# USAGE
-#   blastn [-h] [-help] [-import_search_strategy filename]
-#     [-export_search_strategy filename] [-task task_name] [-db database_name]
-#     [-dbsize num_letters] [-gilist filename] [-seqidlist filename]
-#     [-negative_gilist filename] [-negative_seqidlist filename]
-#     [-taxids taxids] [-negative_taxids taxids] [-taxidlist filename]
-#     [-negative_taxidlist filename] [-entrez_query entrez_query]
-#     [-db_soft_mask filtering_algorithm] [-db_hard_mask filtering_algorithm]
-#     [-subject subject_input_file] [-subject_loc range] [-query input_file]
-#     [-out output_file] [-evalue evalue] [-word_size int_value]
-#     [-gapopen open_penalty] [-gapextend extend_penalty]
-#     [-perc_identity float_value] [-qcov_hsp_perc float_value]
-#     [-max_hsps int_value] [-xdrop_ungap float_value] [-xdrop_gap float_value]
-#     [-xdrop_gap_final float_value] [-searchsp int_value]
-#     [-sum_stats bool_value] [-penalty penalty] [-reward reward] [-no_greedy]
-#     [-min_raw_gapped_score int_value] [-template_type type]
-#     [-template_length int_value] [-dust DUST_options]
-#     [-filtering_db filtering_database]
-#     [-window_masker_taxid window_masker_taxid]
-#     [-window_masker_db window_masker_db] [-soft_masking soft_masking]
-#     [-ungapped] [-culling_limit int_value] [-best_hit_overhang float_value]
-#     [-best_hit_score_edge float_value] [-subject_besthit]
-#     [-window_size int_value] [-off_diagonal_range int_value]
-#     [-use_index boolean] [-index_name string] [-lcase_masking]
-#     [-query_loc range] [-strand strand] [-parse_deflines] [-outfmt format]
-#     [-show_gis] [-num_descriptions int_value] [-num_alignments int_value]
-#     [-line_length line_length] [-html] [-sorthits sort_hits]
-#     [-sorthsps sort_hsps] [-max_target_seqs num_sequences]
-#     [-num_threads int_value] [-mt_mode int_value] [-remote] [-version]
-
-#  -query <File_In>
-#    Input file name
-#    Default = `-'
-#  -db <String>
-#    BLAST database name
-#     * Incompatible with:  subject, subject_loc
-#  -out <File_Out, file name length < 256>
-#    Output file name
-#    Default = `-'
-#  -evalue <Real>
-#    Expectation value (E) threshold for saving hits 
-#    Default = `10'
-
-#  *** BLAST-2-Sequences options
-#  -subject <File_In>
-#    Subject sequence(s) to search
-#     * Incompatible with:  db, gilist, seqidlist, negative_gilist,
-#    negative_seqidlist, taxids, taxidlist, negative_taxids, negative_taxidlist,
-#    db_soft_mask, db_hard_mask
-
-#  *** Formatting options
-#  -outfmt <String>
-#    alignment view options:
-#      7 = Tabular with comment lines,   
-#             qseqid means Query Seq-id
-#                qgi means Query GI
-#               qacc means Query accesion
-#            qaccver means Query accesion.version
-#               qlen means Query sequence length
-#             sseqid means Subject Seq-id
-#          sallseqid means All subject Seq-id(s), separated by a ';'
-#                sgi means Subject GI
-#             sallgi means All subject GIs
-#               sacc means Subject accession
-#            saccver means Subject accession.version
-#            sallacc means All subject accessions
-#               slen means Subject sequence length
-#             qstart means Start of alignment in query
-#               qend means End of alignment in query
-#             sstart means Start of alignment in subject
-#               send means End of alignment in subject
-#               qseq means Aligned part of query sequence
-#               sseq means Aligned part of subject sequence
-#             evalue means Expect value
-#           bitscore means Bit score
-#              score means Raw score
-#             length means Alignment length
-#             pident means Percentage of identical matches
-#             nident means Number of identical matches
-#           mismatch means Number of mismatches
-#             staxid means Subject Taxonomy ID
-#           ssciname means Subject Scientific Name
-#           scomname means Subject Common Name
-#         sblastname means Subject Blast Name
-#          sskingdom means Subject Super Kingdom
-#            staxids means unique Subject Taxonomy ID(s), separated by a ';'
-#                          (in numerical order)
-#          sscinames means unique Subject Scientific Name(s), separated by a ';'
-#          scomnames means unique Subject Common Name(s), separated by a ';'
-#         sblastnames means unique Subject Blast Name(s), separated by a ';'
-#                          (in alphabetical order)
-#         sskingdoms means unique Subject Super Kingdom(s), separated by a ';'
-#                          (in alphabetical order) 
-#             stitle means Subject Title
-#         salltitles means All Subject Title(s), separated by a '<>'
-#    When not provided, the default value is:
-#    'qaccver saccver pident length mismatch gapopen qstart qend sstart send
-#    evalue bitscore', which is equivalent to the keyword 'std'
-#    The supported format specifier for option 17 is:
-#                 SQ means Include Sequence Data
-#                 SR means Subject as Reference Seq
-#    Default = `0'
-#  -remote
-#    Execute search remotely?
-#     * Incompatible with:  gilist, seqidlist, taxids, taxidlist,
-#    negative_gilist, negative_seqidlist, negative_taxids, negative_taxidlist,
-#    subject_loc, num_threads
-
+        
 ########################################################################################
 # classify assembled contigs with MMSeq2
 # couldn't get to work :(
 ########################################################################################
-# mmseqs databases UniProtKB/Swiss-Prot data/mmseq2/swissprot tmp
+        
+# https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz 87 Mb
+# https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref50/uniref50.fasta.gz 10 gb
+# https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz 35 gb
+# https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref100/uniref100.fasta.gz 80 gb
 
-# mmseqs databases --file-allocation=none UniProtKB/Swiss-Prot data/mmseq2/swissprot tmp
+# https://www.uniprot.org/help/pathway
+# https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/README
+# https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/README
+# https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/taxonomic_divisions/READMEa
+# https://github.com/soedinglab/mmseqs2/wiki#how-to-compute-the-lowest-common-ancestor-lca-of-a-given-set-of-sequences
+        
+    
+    
+# mkdir -p data/mmseq2
+# mmseqs databases UniProtKB/Swiss-Prot data/mmseq2/swissprot tmp - 957Mb
+# mmseqs databases UniRef50 data/mmseq2/UniRef50 tmp
 
+# SO SLOW
 # mmseqs databases UniRef90 data/mmseq2/UniRef90 tmp
+# mmseqs easy-taxonomy assembled-conigs.fna data/mmseq2/swissprot alnRes tmp
 
-# mmseqs databases UniRef90 data/mmseq2/UniRef90 tmp
+# data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa
+# data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa
+
+# 2 Gb memory consumed
+mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
+
+# 2 Gb memory consumed
+mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
+
+# 23 Gb memory consumed - slow!!
+# 2022-12-27T14:34:24
+# 2022-12-27T16:19:08
+# 2 hours
+mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
+
+
+mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
+
+
+# don't need because using prebuilt databases??
 # mmseqs createdb examples/DB.fasta targetDB
 # mmseqs createtaxdb targetDB tmp
 # mmseqs createindex targetDB tmp
-# mmseqs easy-taxonomy examples/QUERY.fasta targetDB alnRes tmp
+
+# https://github.com/soedinglab/MMseqs2/wiki#taxonomy-report-in-kraken-or-krona-style
+
+# mmseqs databases
+# Usage: mmseqs databases <name> <o:sequenceDB> <tmpDir> [options]
 
 
-########################################################################################
-# classify assembled contigs with cat
-########################################################################################
+# yes:
+#   Name                	Type      	Taxonomy	Url
+# - NR - already running through Blast
+# - NR                  	Aminoacid 	     yes	https://ftp.ncbi.nlm.nih.gov/blast/db/FASTA
 
-# mkdir CAT
-# cd CAT
-# wget tbb.bio.uu.nl/bastiaan/CAT_prepare/CAT_prepare_20210107.tar.gz
+# maybe later:
+# - NT                  	Nucleotide	       -	https://ftp.ncbi.nlm.nih.gov/blast/db/FASTA
+# - PDB                 	Aminoacid 	       -	https://www.rcsb.org
+# - PDB70               	Profile   	       -	https://github.com/soedinglab/hh-suite
+# - Pfam-A.full         	Profile   	       -	https://pfam.xfam.org
+# - Pfam-A.seed         	Profile   	       -	https://pfam.xfam.org
+# - CDD                   Profile                -        https://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml
+# - eggNOG              	Profile   	       -	http://eggnog5.embl.de
+# - VOGDB                 Profile                -        https://vogdb.org
+# - Resfinder           	Nucleotide	       -	https://cge.cbs.dtu.dk/services/ResFinder
 
-# tar -xvzf CAT_prepare_20210107.tar.gz
 
-# CAT contigs -c {contigs fasta} -d {database folder} -t {taxonomy folder}
+# annotate with prodigal
 
-########################################################################################
-# classify assembled contigs with SprayNPray
-# https://github.com/Arkadiy-Garber/SprayNPray
-########################################################################################
+# prodigal -p single -i closed-isolate.fna -a closed-isolate.fna.prodigal.orfs.faa -d closed-isolate.fna.prodigal.orfs.fna -f gff  -o closed-isolate.fna.prodigal.orfs.gff -s closed-isolate.fna.prodigal.orfs.all
 
-# wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz
-# git clone https://github.com/Arkadiy-Garber/SprayNPray.git
-# cd SprayNPray
-# bash setup.sh
-# bash dlDB.sh /path/to/preferred/directory/for/db
-# conda activate sprayandpray
-# spray-and-pray.py -g genomeContigs.fa -out genomeContigs -ref /path/to/nr/nr.faa
+# prodigal -p meta -c -i data/SRA/SRR6399459/spades/contigs.fasta -a data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa -d data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.fna -f gff -o data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.gff -s data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.all
 
-########################################################################################
-# classify assembled contigs with kaiju
-# https://github.com/bioinformatics-centre/kaiju
-########################################################################################
+# pyrodigal -p meta -c -i data/SRA/SRR6399459/spades/contigs.fasta -a data/SRA/SRR6399459/spades/contigs.fasta.pyrodigal.orfs.faa -d data/SRA/SRR6399459/spades/contigs.fasta.pyrodigal.orfs.fna -f gff -o data/SRA/SRR6399459/spades/contigs.fasta.pyrodigal.orfs.gff -s data/SRA/SRR6399459/spades/contigs.fasta.pyrodigal.orfs.all
 
-# mkdir data/kaijudb
-# cd data/kaijudb
-# kaiju-makedb -s refseq
+# prodigal -p meta -c -i metagenome.fna -a metagenome.fna.prodigal.orfs.faa -d metagenome.fna.prodigal.orfs.fna -f gff -o metagenome.fna.prodigal.orfs.gff -s metagenome.fna.prodigal.orfs.all
 
-# kaiju -z `nproc` -t nodes.dmp -f refseq/kaiju_db_refseq.fmi -i firstfile.fastq -j secondfile.fastq -o kaiju.out
+# prodigal -p meta -c -i data/SRA/SRR6399459/megahit/final.contigs.fa -a data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa -d data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.fna -f gff -o data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.gff -s data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.all
 
-# kaiju2krona -t nodes.dmp -n names.dmp -i kaiju.out -o kaiju.out.krona
+# pyrodigal -p meta -c -i data/SRA/SRR6399459/megahit/final.contigs.fa -a data/SRA/SRR6399459/megahit/final.contigs.fa.pyrodigal.orfs.faa -d data/SRA/SRR6399459/megahit/final.contigs.fa.pyrodigal.orfs.fna -f gff -o data/SRA/SRR6399459/megahit/final.contigs.fa.pyrodigal.orfs.gff -s data/SRA/SRR6399459/megahit/final.contigs.fa.pyrodigal.orfs.all
 
-# ktImportText -o kaiju.out.html kaiju.out.krona
 
-# kaiju2table -t nodes.dmp -n names.dmp -r genus -o kaiju_summary.tsv kaiju.out [kaiju2.out, ...]
 
-# Similarly, option -c can be used to specify the threshold by absolute read count.
 
-# Option -u disables counting unclassified reads towards the total number of reads when calculating percentages.
-
-# Option -p will print the full taxon path instead of just the taxon name.
-
-# kaiju-addTaxonNames -t nodes.dmp -n names.dmp -i kaiju.out -o kaiju.names.out
-
-# Option -u will omit unclassified reads.
-# Option -p will print the full taxon path instead of just the taxon name.
-# Option -r will print the path containing only to the specified ranks. For example, -r phylum,genus will append the names of phylum and genus to the end of each line.
-
-########################################################################################
-# classify assembled contigs with megan6
-# https://software-ab.cs.uni-tuebingen.de/download/megan6/welcome.html
-########################################################################################
-
-########################################################################################
-# classify assembled contigs with sourmash
-########################################################################################
-
-# dropping because of non-inclusive DB
-# https://sourmash.readthedocs.io/en/latest/tutorials-lca.html
-# curl -L -o genbank-k31.lca.json.gz https://osf.io/4f8n3/download
-# sourmash sketch dna -p scaled=1000,k=31 --name-from-first some-genome.fa.gz
-# sourmash lca summarize --db genbank-k31.lca.json.gz \
-    # --query some-genome.fa.gz.sig
+ -s:  Write all potential genes (with scores) to the selected file.

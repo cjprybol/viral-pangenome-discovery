@@ -32,20 +32,19 @@ dependencies:
   - snakemake
   - sra-tools
   - bwa
+  - bowtie2
   - kraken2
   - spades
   - megahit
   - blast
   - seqtk
-  - trimmomatic
-  - mmseqs2
-  - cat
   - minimap2
   - samtools
-  - kaiju
   - fastqc
   - trim-galore
-  - fastani
   - seqkit
-  - bowtie2
-  - megan
+  - virsorter=2
+  - pyrodigal
+  - prodigal
+  - diamond
+  - mmseqs2

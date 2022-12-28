@@ -63,21 +63,25 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
 #     -query data/SRA/SRR6399459/megahit/final.contigs.fa \
 #     -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
 
-export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/” && \
-blastn \
-    -db nt \
-    -evalue 0.001 \
-    -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
-    -query data/SRA/SRR6399459/megahit/final.contigs.fa \
-    -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
+# this did not work
+# export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/” && \
+# blastn \
+#     -db nt \
+#     -evalue 0.001 \
+#     -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
+#     -query data/SRA/SRR6399459/megahit/final.contigs.fa \
+#     -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
 
-cd data/blastdb && \
-blastn \
-    -db nt \
-    -evalue 0.001 \
-    -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
-    -query ../../data/SRA/SRR6399459/megahit/final.contigs.fa \
-    -out ../../data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.txt
+
+# # this worked!!!
+# cd data/blastdb && \
+# blastn \
+#     -db nt \
+#     -evalue 0.001 \
+#     -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom stitle' \
+#     -query ../../data/SRA/SRR6399459/megahit/final.contigs.fa \
+#     -out ../../data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.txt && \
+# cd ../..
 
 
         

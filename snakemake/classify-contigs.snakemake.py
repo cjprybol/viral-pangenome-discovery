@@ -14,6 +14,7 @@ rule download_blast_nt:
         mkdir -p data/blastdb
         cd data/blastdb
         time update_blastdb.pl --decompress nt
+        time update_blastdb.pl --decompress taxdb
         """
         
 # TODO
@@ -44,13 +45,40 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
         "environment.yml"
     shell:
         """
+        BLASTDB=”data/blastdb” && \
+        export BLASTDB && \
         blastn \
             -db data/blastdb/nt \
             -evalue 0.001 \
-            -outfmt '7 qseqid qgi qacc qaccver qlen sseqid sallseqid sgi sallgi sacc saccver sallacc slen qstart qend sstart send qseq sseq evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
-            -query data/exposome/SRR6399459/megahit_100k/final.contigs.fa \
-            -out data/exposome/SRR6399459/megahit_100k/final.contigs.fa.blastp.txt
+            -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
+            -query data/SRA/SRR6399459/megahit/final.contigs.fa \
+            -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.txt
         """
+        
+# export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/taxdb” && \
+# blastn \
+#     -db data/blastdb/nt \
+#     -evalue 0.001 \
+#     -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
+#     -query data/SRA/SRR6399459/megahit/final.contigs.fa \
+#     -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
+
+export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/” && \
+blastn \
+    -db nt \
+    -evalue 0.001 \
+    -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
+    -query data/SRA/SRR6399459/megahit/final.contigs.fa \
+    -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
+
+cd data/blastdb && \
+blastn \
+    -db nt \
+    -evalue 0.001 \
+    -outfmt '7 qseqid qlen sseqid sgi sacc saccver slen qstart qend sstart send evalue bitscore score length pident nident mismatch staxid ssciname scomname sblastname sskingdom staxids sscinames scomnames sblastnames sskingdoms stitle salltitles' \
+    -query ../../data/SRA/SRR6399459/megahit/final.contigs.fa \
+    -out ../../data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.txt
+
 
         
 ########################################################################################
@@ -86,17 +114,24 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
 mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
 
 # 2 Gb memory consumed
+# 21% classified
 mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
 
 # 23 Gb memory consumed - slow!!
 # 2022-12-27T14:34:24
 # 2022-12-27T16:19:08
 # 2 hours
+# 39% classified
 mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
-
 
 mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
 
+# 52 Gb memory consumed
+# Estimated memory consumption: 21G
+# 022-12-27T20:45:12
+# not sure how long, but comparable to the uniref 50
+# 42% classified
+mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef90 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef90 tmp
 
 # don't need because using prebuilt databases??
 # mmseqs createdb examples/DB.fasta targetDB

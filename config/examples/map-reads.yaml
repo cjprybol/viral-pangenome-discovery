@@ -1,0 +1,7 @@
+# Example config for snakemake/map-reads.snakemake.py (bwa / bowtie2 against a reference).
+# In the original analysis the reference was the merged NCBI virus (taxon 10239) FASTA.
+# A real (non-dry) run writes the bwa/bowtie2 index files next to reference_fasta and the BAM
+# next to the forward reads, i.e. under tests/data/. Use copies under results/ for real runs.
+reference_fasta: tests/data/reference.fna
+forward: tests/data/sample_1.fastq.gz
+reverse: tests/data/sample_2.fastq.gz

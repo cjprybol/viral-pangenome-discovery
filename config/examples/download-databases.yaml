@@ -1,0 +1,3 @@
+# Example config for snakemake/download-databases.snakemake.py.
+# A real run downloads a multi-GB Kraken2 database.
+out_directory: resources/kraken-databases

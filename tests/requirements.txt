@@ -1,0 +1,2 @@
+# Minimal dependencies for tests/test_dryrun.sh (dry-run and lint only).
+snakemake==9.27.2

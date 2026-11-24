@@ -1,0 +1,4 @@
+# Example config for snakemake/sra-download.snakemake.py (fasterq-dump).
+# A real (non-dry) run downloads the full run from SRA.
+srr_identifier: SRR6399459
+directory: results/sra

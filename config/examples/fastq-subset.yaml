@@ -1,0 +1,7 @@
+# Example config for snakemake/fastq-subset.snakemake.py (seqtk random subsample).
+# Subsampled files are written next to the inputs with the rate as a suffix.
+# A real (non-dry) run writes the subsampled FASTQs next to the inputs, i.e. under tests/data/.
+# For your own data, point forward/reverse at copies under results/ instead.
+forward: tests/data/sample_1.fastq.gz
+reverse: tests/data/sample_2.fastq.gz
+sampling_rate: 0.5

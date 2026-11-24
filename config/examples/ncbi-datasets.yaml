@@ -1,0 +1,5 @@
+# Example config for snakemake/ncbi-datasets.snakemake.py.
+# taxon 10239 = Viruses. A real run downloads every GenBank virus genome
+# (tens of thousands of assemblies) into data/.
+taxon: 10239
+source: genbank

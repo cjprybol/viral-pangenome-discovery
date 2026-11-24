@@ -1,0 +1,8 @@
+# Example config for snakemake/classify-reads.snakemake.py (Kraken2).
+# kraken_db must point at an unpacked Kraken2 database, e.g. one fetched by
+# snakemake/download-databases.snakemake.py. The dry-run does not read it.
+forward: tests/data/sample_1.fastq.gz
+reverse: tests/data/sample_2.fastq.gz
+kraken_db: resources/kraken-databases/k2_pluspfp_08gb_20220607
+out_directory: results/example/kraken
+sample_id: example

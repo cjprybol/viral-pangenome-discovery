@@ -55,7 +55,7 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
             -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.txt
         """
         
-# export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/taxdb” && \
+# export BLASTDB=”data/blastdb/taxdb” && \
 # blastn \
 #     -db data/blastdb/nt \
 #     -evalue 0.001 \
@@ -64,7 +64,7 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
 #     -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
 
 # this did not work
-# export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/” && \
+# export BLASTDB=”data/blastdb/” && \
 # blastn \
 #     -db nt \
 #     -evalue 0.001 \
@@ -115,27 +115,27 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
 # data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa
 
 # 2 Gb memory consumed
-mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
+# mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
 
 # 2 Gb memory consumed
 # 21% classified
-mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
+# mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/swissprot data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.swissprot tmp
 
 # 23 Gb memory consumed - slow!!
 # 2022-12-27T14:34:24
 # 2022-12-27T16:19:08
 # 2 hours
 # 39% classified
-mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
+# mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
 
-mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
+# mmseqs easy-taxonomy data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa data/mmseq2/UniRef50 data/SRA/SRR6399459/spades/contigs.fasta.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef50 tmp
 
 # 52 Gb memory consumed
 # Estimated memory consumption: 21G
 # 022-12-27T20:45:12
 # not sure how long, but comparable to the uniref 50
 # 42% classified
-mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef90 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef90 tmp
+# mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa data/mmseq2/UniRef90 data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.faa.mmseq2.easy-taxonomy.UniRef90 tmp
 
 # don't need because using prebuilt databases??
 # mmseqs createdb examples/DB.fasta targetDB
@@ -182,4 +182,4 @@ mmseqs easy-taxonomy data/SRA/SRR6399459/megahit/final.contigs.fa.prodigal.orfs.
 
 
 
- -s:  Write all potential genes (with scores) to the selected file.
+# -s:  Write all potential genes (with scores) to the selected file.

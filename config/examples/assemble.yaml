@@ -1,0 +1,4 @@
+# Example config for snakemake/assemble.snakemake.py (MEGAHIT and metaSPAdes).
+forward: tests/data/sample_1.fastq.gz
+reverse: tests/data/sample_2.fastq.gz
+out_directory: results/example

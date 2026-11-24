@@ -657,7 +657,7 @@ rule classify_kraken_pluspfp_db_SRR6399459_100k:
 # cd centrifuge
 # make
 # # add this to my path
-# make install prefix=/home/jovyan/.local
+# make install prefix=$HOME/.local
     
 
 ########################################################################################
@@ -718,15 +718,15 @@ rule samtools_filter_bwa_mem_align_SRR6399459_100k:
 #     shell:
 #         """
 #         megahit \
-#             -1 /home/jovyan/workspace/viral-pangenome-discovery/data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz \
-#             -2 /home/jovyan/workspace/viral-pangenome-discovery/data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz \
-#             -o /home/jovyan/workspace/viral-pangenome-discovery/data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/megahit
+#             -1 data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz \
+#             -2 data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz \
+#             -o data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/megahit
 #         """
 
 # 2022-12-11 14:06:13 - MEGAHIT v1.2.9
 # 2022-12-11 14:06:13 - Using megahit_core with POPCNT and BMI2 support
 # 2022-12-11 14:06:13 - Convert reads to binary library
-# 2022-12-11 14:06:13 - b'INFO  sequence/io/sequence_lib.cpp  :   75 - Lib 0 (/home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/SRR6399459_1.100k.fastq.gz,/home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/SRR6399459_2.100k.fastq.gz): pe, 114394 reads, 151 max length'
+# 2022-12-11 14:06:13 - b'INFO  sequence/io/sequence_lib.cpp  :   75 - Lib 0 (data/exposome/SRR6399459/SRR6399459_1.100k.fastq.gz,data/exposome/SRR6399459/SRR6399459_2.100k.fastq.gz): pe, 114394 reads, 151 max length'
 # 2022-12-11 14:06:13 - b'INFO  utils/utils.h                 :  152 - Real: 0.2311\tuser: 0.1197\tsys: 0.0179\tmaxrss: 14940'
 # 2022-12-11 14:06:13 - k-max reset to: 141 
 # 2022-12-11 14:06:13 - Start assembly. Number of CPU threads 48 
@@ -772,9 +772,9 @@ rule megahit_assemble_SRR6399459_100k:
     shell:
         """
         megahit \
-            -1 /home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/SRR6399459_1.100k.fastq.gz \
-            -2 /home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/SRR6399459_2.100k.fastq.gz \
-            -o /home/jovyan/workspace/viral-pangenome-discovery/data/exposome/SRR6399459/megahit_100k
+            -1 data/exposome/SRR6399459/SRR6399459_1.100k.fastq.gz \
+            -2 data/exposome/SRR6399459/SRR6399459_2.100k.fastq.gz \
+            -o data/exposome/SRR6399459/megahit_100k
         """
 
 ########################################################################################
@@ -808,9 +808,9 @@ rule megahit_assemble_SRR6399459_100k:
 #         """
 #         spades.py \
 #             --meta \
-#             -1 /home/jovyan/workspace/viral-pangenome-discovery/data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz \
-#             -2 /home/jovyan/workspace/viral-pangenome-discovery/data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz \
-#             -o /home/jovyan/workspace/viral-pangenome-discovery/data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/spades
+#             -1 data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_1.fastq.gz \
+#             -2 data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/SRR6476469_2.fastq.gz \
+#             -o data/usa_mt-pleasant-research-farm_cornell-university_new-york/SRR6476469/spades
 #         """
 
 ########################################################################################

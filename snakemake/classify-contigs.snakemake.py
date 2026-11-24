@@ -55,7 +55,7 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
             -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.txt
         """
         
-# export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/taxdb” && \
+# export BLASTDB=”data/blastdb/taxdb” && \
 # blastn \
 #     -db data/blastdb/nt \
 #     -evalue 0.001 \
@@ -64,7 +64,7 @@ rule blast_nt_megahit_assembled_contigs_SRR6399459_100k:
 #     -out data/SRA/SRR6399459/megahit/final.contigs.fa.blastn.nt.set-blastdir.txt
 
 # this did not work
-# export BLASTDB=”/home/jovyan/workspace/viral-pangenome-discovery/data/blastdb/” && \
+# export BLASTDB=”data/blastdb/” && \
 # blastn \
 #     -db nt \
 #     -evalue 0.001 \

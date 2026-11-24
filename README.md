@@ -3,7 +3,7 @@
 [![snakemake dry-run](https://github.com/cjprybol/viral-pangenome-discovery/actions/workflows/dryrun.yml/badge.svg)](https://github.com/cjprybol/viral-pangenome-discovery/actions/workflows/dryrun.yml)
 
 Snakemake modules and Julia notebooks for finding viral sequence in environmental shotgun metagenomes (air, soil/compost, wastewater, and human stool) from public SRA and HMP data.
-The project compared two routes to a viral pangenome: **classify first** (label reads as viral with Kraken2 or by mapping to all NCBI virus genomes, then assemble) and **assemble first** (assemble each sample with MEGAHIT or metaSPAdes, then classify the contigs with BLAST or MMseqs2).
+The project was set up to explore two routes to a viral pangenome: **classify first** (label reads as viral with Kraken2 or by mapping to all NCBI virus genomes, with assembly of the classified reads planned but not implemented) and **assemble first** (assemble each sample with MEGAHIT or metaSPAdes, then classify the contigs with BLAST or MMseqs2).
 Julia notebooks built on [Mycelia](https://github.com/cjprybol/Mycelia) estimate k-mer saturation of known viral diversity in the NCBI reference set and in reads classified as viral.
 
 > **Status:** research code from 2022, not actively maintained.
@@ -12,7 +12,7 @@ Julia notebooks built on [Mycelia](https://github.com/cjprybol/Mycelia) estimate
 
 ## Workflow
 
-Each box is a Snakemake rule; each grouping is one Snakefile in `snakemake/`.
+Most boxes are Snakemake rules; notebook and commented-out steps are labelled. Each grouping is one Snakefile in `snakemake/`.
 Modules are run separately, passing paths between them with `--config` (solid arrows are dependencies Snakemake tracks within a module; dashed arrows are hand-offs between modules).
 
 ```mermaid
@@ -99,7 +99,7 @@ The download modules (`sra-download`, `ncbi-datasets`, `download-databases`) fet
 
 ### Tests
 
-`tests/test_dryrun.sh` dry-runs every parameterized module against the example configs and the synthetic inputs in `tests/data/` (a few hundred random reads; regenerate with `python3 tests/make_synthetic_data.py`), checks the two exploratory modules parse, and summarizes `snakemake --lint` findings.
+`tests/test_dryrun.sh` dry-runs every parameterized module against the example configs and the synthetic inputs in `tests/data/` (25 synthetic read pairs drawn from a 2 kb random reference; regenerate with `python3 tests/make_synthetic_data.py`), checks the two exploratory modules parse, and summarizes `snakemake --lint` findings.
 It needs only Snakemake, not the bioinformatics tools:
 
 ```bash
@@ -130,12 +130,13 @@ blast-header.txt      BLAST tabular output column names
 
 ## Known limitations
 
+- **The classify-first → assemble path and the head-to-head comparison were not completed.**
 - **No end-to-end workflow.** Modules are run one at a time, with paths copied between them via `--config`.
 - **`assemble` rules declare no outputs**, so Snakemake cannot track or skip completed assemblies.
 - **`ncbi-datasets`:** `rehydrate_taxon` does not declare a dependency on `unzip_taxon`, so requesting `merge_fastas` on a fresh checkout schedules only rehydrate and merge; run `unzip_taxon` first.
 - **`classify-reads`** passes the same path to Kraken2's `--output` and `--report`, so the per-read output and the summary report collide; give them separate paths before reusing it.
 - **`map-reads`** defines bowtie2 indexing but no bowtie2 alignment rule.
-- **`classify-contigs` and `map-contigs`** are exploratory: rules use hard-coded paths for one sample (SRR6399459), and the MMseqs2 and Prodigal commands are kept as comments recording what was tried.
+- **`classify-contigs` and `map-contigs`** are exploratory: rules use hard-coded paths for one sample (SRR6399459), and the MMseqs2 and Prodigal commands are kept as comments recording what was tried. `classify-contigs` also contains known-broken shell lines (typographic quotes around the `BLASTDB` path, and a `conda:` path missing `../`).
 - Shell commands use `` `nproc` ``, which is not available on macOS without GNU coreutils.
 - The notebooks target Julia 1.6/1.7 and load Mycelia from a sibling checkout (`../../Mycelia`); the Mycelia API has changed since 2022.
 - Centrifuge and Kaiju were evaluated and dropped (see comments in `download-databases` and `classify-reads`).

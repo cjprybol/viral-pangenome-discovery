@@ -17,7 +17,7 @@ Choosing between various environmental metagenomes:
 - want soil, water, and air
 
 - soil is from mt pleasant study because I already had it and it has soil + compost
-- air is from exposome data from Mike's lab
+- air is from exposome data from a collaborator's lab
 - water is from NCBI
     - https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&id=410657&lvl=3&keep=1&srchmode=1&unlock
     - filtered down to the following of interest:

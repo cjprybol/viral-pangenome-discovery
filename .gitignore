@@ -9,3 +9,12 @@ Manifest.toml
 *.fq
 tmp/*
 snakemake/logs/*
+
+# local outputs from the example configs
+results/
+resources/
+.worktrees/
+
+# tiny synthetic test inputs are tracked despite the data and *.gz rules above
+!tests/data/
+!tests/data/*.fastq.gz

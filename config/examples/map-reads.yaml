@@ -1,0 +1,5 @@
+# Example config for snakemake/map-reads.snakemake.py (bwa / bowtie2 against a reference).
+# In the original analysis the reference was the merged NCBI virus (taxon 10239) FASTA.
+reference_fasta: tests/data/reference.fna
+forward: tests/data/sample_1.fastq.gz
+reverse: tests/data/sample_2.fastq.gz

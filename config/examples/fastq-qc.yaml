@@ -1,0 +1,6 @@
+# Example config for snakemake/fastq-qc.snakemake.py (FastQC -> Trim Galore -> FastQC).
+# Paths are relative to the repository root.
+directory: results/example
+sample_id: example
+forward: tests/data/sample_1.fastq.gz
+reverse: tests/data/sample_2.fastq.gz

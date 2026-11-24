@@ -75,7 +75,7 @@ rule bowtie2_index_reference_fasta:
     input:
         reference_fasta
     output:
-        reference_fasta + ".1.bt2"
+        reference_fasta + ".1.bt2",
         reference_fasta + ".rev.1.bt2"
     shell:
         """

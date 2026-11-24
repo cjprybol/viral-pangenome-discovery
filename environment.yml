@@ -38,6 +38,7 @@ dependencies:
   - megahit
   - blast
   - seqtk
+  - pigz
   - minimap2
   - samtools
   - fastqc

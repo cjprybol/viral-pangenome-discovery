@@ -1,0 +1,21 @@
+name: snakemake dry-run
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  dryrun:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install snakemake
+        run: python -m pip install --requirement tests/requirements.txt
+      - name: Dry-run and lint every module
+        run: bash tests/test_dryrun.sh
